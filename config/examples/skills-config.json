@@ -1,0 +1,28 @@
+{
+  "repositories": [
+    {
+      "name": "anthropics_skills",
+      "url": "https://github.com/anthropics/skills.git",
+      "enabled": true
+    },
+    {
+      "name": "agentskills_agentskills",
+      "url": "https://github.com/agentskills/agentskills.git",
+      "enabled": true
+    },
+    {
+      "name": "huggingface_skills",
+      "url": "https://github.com/huggingface/skills.git",
+      "enabled": true
+    },
+    {
+      "name": "composio_awesome_skills",
+      "url": "https://github.com/ComposioHQ/awesome-claude-skills.git",
+      "enabled": true
+    }
+  ],
+  "settings": {
+    "incremental": false,
+    "validation": false
+  }
+}

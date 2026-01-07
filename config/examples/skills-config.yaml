@@ -1,0 +1,24 @@
+# Skills Import Configuration
+# This file configures which repositories to import Claude Skills from
+
+repositories:
+  - name: "anthropics_skills"
+    url: "https://github.com/anthropics/skills.git"
+    enabled: true
+    
+  - name: "agentskills_agentskills"
+    url: "https://github.com/agentskills/agentskills.git"
+    enabled: true
+    
+  - name: "huggingface_skills"
+    url: "https://github.com/huggingface/skills.git"
+    enabled: true
+    
+  - name: "composio_awesome_skills"
+    url: "https://github.com/ComposioHQ/awesome-claude-skills.git"
+    enabled: true
+
+# Optional settings (for future features)
+settings:
+  incremental: false
+  validation: false

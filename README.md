@@ -12,7 +12,7 @@ A third-party MCP server: Enable all IDEs to access Claude Code Skills capabilit
 - **Skill Tree Navigation / 技能树导航**: Hierarchical browsing of skills by category / 按类别分层浏览技能
 - **Search Functionality / 搜索功能**: Full-text search across all indexed skills / 对所有索引技能进行全文搜索
 - **Skill Details / 技能详情**: Detailed information retrieval for each skill / 每个技能的详细信息检索
-- **Import Tools / 导入工具**: Built-in script to import skills from public repositories / 内置从公共仓库导入技能的脚本
+- **Enhanced Import Tools / 增强导入工具**: Advanced import script with configuration files, progress tracking, and robust error handling / 具有配置文件、进度跟踪和健壮错误处理的高级导入脚本
 - **No Bundled Skills in Repo / 仓库不内置 Skills**: This repository does not ship skills by default; put your skills under `~/.claude/skills` or `./.skills` / 本仓库默认不内置 skills，请将 skills 放到 `~/.claude/skills` 或 `./.skills`
 
 ## Prerequisites / 先决条件
@@ -38,10 +38,18 @@ skill_cortex_server/
 │   ├── index_store.py        # Index storage and caching / 索引存储和缓存
 │   ├── tags_registry.py      # Tag management system / 标签管理系统
 │   └── frontmatter.py        # Frontmatter parsing / 前置元数据解析
+├── config/                    # Configuration files / 配置文件
+│   └── examples/             # Example configuration files / 示例配置文件
+│       ├── skills-config.yaml # YAML configuration example / YAML配置示例
+│       └── skills-config.json # JSON configuration example / JSON配置示例
+├── .kiro/                     # Kiro specs and development files / Kiro规范和开发文件
+│   └── specs/                # Feature specifications / 功能规范
 ├── .skill_cortex_cache/       # Cache directory / 缓存目录
 │   └── index.json            # Skill index cache / 技能索引缓存
 ├── .skill_cortex_sources/     # Imported skills source / 导入的技能源
-├── import_skills.py          # Skill import script / 技能导入脚本
+├── .skills/                   # Local skills directory / 本地技能目录
+│   └── imported/             # Imported skills / 导入的技能
+├── import_skills.py          # Enhanced skill import script / 增强的技能导入脚本
 ├── pyproject.toml            # Project configuration / 项目配置
 ├── README.md                 # This file / 本文件
 └── tags.md                   # Allowed tags list / 允许的标签列表
@@ -187,7 +195,28 @@ Returns the current tags list or operation result / 返回当前标签列表或�
 
 ## Importing Skills / 导入技能
 
-The project includes a built-in script to import skills from public repositories / 项目包含一个内置脚本，用于从公共仓库导入技能
+The project includes an enhanced import script with advanced features for importing skills from public repositories / 项目包含一个增强的导入脚本，具有从公共仓库导入技能的高级功能
+
+### Enhanced Import Features / 增强导入功能
+
+#### 🔧 Configuration File Support / 配置文件支持
+- **YAML/JSON Configuration**: Use configuration files to customize repository lists without modifying code / 使用配置文件自定义仓库列表，无需修改代码
+- **Auto-discovery**: Automatically finds `skills-config.yaml`, `skills-config.yml`, or `skills-config.json` in current directory / 自动查找当前目录中的配置文件
+- **Custom config path**: Use `--config` option to specify custom configuration file / 使用 `--config` 选项指定自定义配置文件
+
+#### 📊 Progress Display / 进度显示
+- **Real-time progress**: Shows current repository being processed with step-by-step feedback / 显示当前处理的仓库和逐步反馈
+- **Skill counting**: Displays number of skills found in each repository / 显示每个仓库中找到的技能数量
+- **Comprehensive summary**: Final report with statistics, timing, and success/failure counts / 包含统计、时间和成功/失败计数的最终报告
+
+#### 🛡️ Robust Error Handling / 健壮错误处理
+- **Continue on error**: Single repository failure doesn't stop the entire import process / 单个仓库失败不会停止整个导入过程
+- **Detailed error reporting**: Clear error messages with specific failure reasons / 清晰的错误消息和具体失败原因
+- **Error categorization**: Different handling for network, file system, and Git errors / 对网络、文件系统和Git错误的不同处理
+
+#### 🔍 Enhanced Preview Mode / 增强预览模式
+- **Detailed dry-run**: Shows repository URLs, skill paths, and counts before actual import / 在实际导入前显示仓库URL、技能路径和计数
+- **Clear indicators**: Clearly shows when running in preview mode with no actual changes / 清楚显示预览模式，不进行实际更改
 
 ### Built-in Skills / 内置技能
 
@@ -209,19 +238,123 @@ Official skills repository from Anthropic / Anthropic 的官方技能仓库
 - **Skill Types / 技能类型**: Documentation, code generation, system administration, and more / 文档、代码生成、系统管理等
 - **Usage / 用途**: Provides high-quality, tested skills for production use / 为生产环境提供高质量、经过测试的技能
 
-### Import Script / 导入脚本
+#### 3. [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills)
+
+Community-curated collection of Claude Skills resources / 社区策划的Claude Skills资源集合
+
+- **Features / 特性**: Curated list of awesome Claude Skills, resources, and tools / 精选的Claude Skills、资源和工具列表
+- **Skill Types / 技能类型**: Various community-contributed skills and resources / 各种社区贡献的技能和资源
+- **Usage / 用途**: Access to community-driven skill collections / 访问社区驱动的技能集合
+
+#### 4. [huggingface/skills](https://github.com/huggingface/skills)
+
+Hugging Face's skills repository for AI and machine learning / Hugging Face 的 AI 和机器学习技能仓库
+
+- **Features / 特性**: Skills and tools for working with Hugging Face ecosystem / 用于 Hugging Face 生态系统的技能和工具
+- **Skill Types / 技能类型**: Machine learning, model training, dataset handling, and more / 机器学习、模型训练、数据处理等
+- **Usage / 用途**: Enhances capabilities for AI/ML tasks and Hugging Face integrations / 增强 AI/ML 任务和 Hugging Face 集成的能力
+
+### Import Script Usage / 导入脚本使用
+
+#### Basic Usage / 基本使用
 
 ```bash
-# Preview what would be imported / 预览将要导入的内容
+# Preview what would be imported (recommended first step) / 预览将要导入的内容（推荐第一步）
 python import_skills.py --dry-run
 
 # Actually import the skills / 实际导入技能
 python import_skills.py
+
+# Clean import (remove existing skills first) / 清理导入（先删除现有技能）
+python import_skills.py --clean
 ```
+
+#### Advanced Usage / 高级使用
+
+```bash
+# Use custom configuration file / 使用自定义配置文件
+python import_skills.py --config my-config.yaml
+
+# Import only specific repositories / 仅导入特定仓库
+python import_skills.py --only anthropics_skills --only agentskills_agentskills
+
+# Skip cloning (use existing local repositories) / 跳过克隆（使用现有本地仓库）
+python import_skills.py --no-clone
+
+# Don't update existing repositories / 不更新现有仓库
+python import_skills.py --no-update
+```
+
+#### Configuration File Examples / 配置文件示例
+
+**YAML Configuration (skills-config.yaml):**
+```yaml
+repositories:
+  - name: "anthropics_skills"
+    url: "https://github.com/anthropics/skills.git"
+    enabled: true
+    
+  - name: "agentskills_agentskills"
+    url: "https://github.com/agentskills/agentskills.git"
+    enabled: true
+    
+  - name: "composio_awesome_skills"
+    url: "https://github.com/ComposioHQ/awesome-claude-skills.git"
+    enabled: true
+    
+  - name: "huggingface_skills"
+    url: "https://github.com/huggingface/skills.git"
+    enabled: true
+
+settings:
+  incremental: false
+  validation: false
+```
+
+**JSON Configuration (skills-config.json):**
+```json
+{
+  "repositories": [
+    {
+      "name": "anthropics_skills",
+      "url": "https://github.com/anthropics/skills.git",
+      "enabled": true
+    },
+    {
+      "name": "agentskills_agentskills",
+      "url": "https://github.com/agentskills/agentskills.git",
+      "enabled": true
+    },
+    {
+      "name": "composio_awesome_skills",
+      "url": "https://github.com/ComposioHQ/awesome-claude-skills.git",
+      "enabled": true
+    },
+    {
+      "name": "huggingface_skills",
+      "url": "https://github.com/huggingface/skills.git",
+      "enabled": true
+    }
+  ],
+  "settings": {
+    "incremental": false,
+    "validation": false
+  }
+}
+```
+
+### Import Process / 导入过程
 
 Skills are imported to: `./.skill_cortex_sources/` / 技能导入到：`./.skill_cortex_sources/`
 
 Skills are copied to: `./.skills/imported/` / 技能拷贝到：`./.skills/imported/`
+
+The import process includes:
+1. **Repository cloning/updating** / 仓库克隆/更新
+2. **Skill discovery** / 技能发现
+3. **File copying** / 文件复制
+4. **Progress reporting** / 进度报告
+5. **Error handling** / 错误处理
 
 ## Troubleshooting / 故障排除
 
@@ -258,6 +391,18 @@ Tags are being rejected / 标签被拒绝
 1. Check the `tags.md` file for the allowed tags list / 检查 `tags.md` 文件中的允许标签列表
 2. Use the `update_tags` tool to add missing tags / 使用 `update_tags` 工具添加缺失的标签
 3. Ensure tag names match exactly (case-sensitive) / 确保标签名称完全匹配（区分大小写）
+
+### Import script errors / 导入脚本错误
+
+**Problem / 问题:**
+Import script fails with configuration or repository errors / 导入脚本因配置或仓库错误而失败
+
+**Solution / 解决方案:**
+1. Use `--dry-run` first to preview what will be imported / 首先使用 `--dry-run` 预览将要导入的内容
+2. Check configuration file syntax if using custom config / 如果使用自定义配置，检查配置文件语法
+3. Verify repository URLs are accessible / 验证仓库URL是否可访问
+4. Use `--no-clone` to skip cloning if repositories already exist locally / 如果仓库已存在本地，使用 `--no-clone` 跳过克隆
+5. Check the detailed error report in the final summary / 检查最终摘要中的详细错误报告
 
 ## Development / 开发
 
